@@ -5,7 +5,7 @@
  */
 var mongoose = require('mongoose'),
     Otp = mongoose.model('Otp'),
-    notp = require('notp'),
+    //notp = require('notp'),
     totp = require('../lib/otp'),
     http = require('http'),
     _ = require('lodash');
