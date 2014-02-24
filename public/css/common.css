@@ -1,0 +1,41 @@
+/*http://learnlayout.com/position.html*/
+.growl {
+  z-index: -1;
+  position: fixed;
+  min-width: 200px;
+  width: 350px;
+  right: 0;
+  top: 50px;
+}
+
+.navbar .nav > li > a.brand {
+  padding-left: 20px;
+  margin-left: 0
+}
+
+.content {
+  margin-top: 70px;
+  width: 100%
+}
+
+@media (min-width: 1400px) {
+  .container {
+    width: 1370px;
+  }
+}
+
+footer {
+  position: fixed;
+  left: 0px;
+  bottom: 0px;
+  height: 30px;
+  width: 100%;
+  background: #ddd;
+  -webkit-box-shadow: 0 8px 6px 6px black;
+  -moz-box-shadow: 0 8px 6px 6px black;
+  box-shadow: 0 8px 6px 6px black
+}
+
+footer p {
+  padding: 5px 0 12px 10px
+}
