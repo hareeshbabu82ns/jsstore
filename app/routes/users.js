@@ -2,6 +2,7 @@
 
 // User routes use users controller
 var users = require('../controllers/users');
+var authorization = require('./middlewares/authorization');
 
 module.exports = function (app, passport) {
   app.get('/signin', users.signin);
@@ -9,7 +10,9 @@ module.exports = function (app, passport) {
   app.get('/signout', users.signout);
   app.get('/users/me', users.me);
 
-  app.post('/user/:userId/update', users.update);
+  app.post('/user/:userId/update', authorization.requiresLogin, users.update);
+  app.get('/user/:userId/genotp', authorization.requiresLogin, users.genOTP);
+  app.get('/user/:userId/delotp', authorization.requiresLogin, users.delOTP);
 
   // Setting up the users api
   app.post('/users', users.create);
@@ -21,6 +24,8 @@ module.exports = function (app, passport) {
   app.post('/users/session', passport.authenticate('local', {
     failureRedirect: '/signin',
     failureFlash: true
+  }),passport.authenticate('totp',{ //TODO correct the process
+     failureRedirect: '/signin', failureFlash: true
   }), users.session);
 
   // Setting the facebook oauth routes

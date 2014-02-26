@@ -7,7 +7,9 @@ var mongoose = require('mongoose'),
     GitHubStrategy = require('passport-github').Strategy,
     GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
     LinkedinStrategy = require('passport-linkedin').Strategy,
+    TotpStrategy = require('passport-totp').Strategy,
     User = mongoose.model('User'),
+    Otp = mongoose.model('Otp'),
     config = require('./config');
 
 
@@ -27,6 +29,17 @@ module.exports = function(passport) {
             done(err, user);
         });
     });
+
+    // Use TOTP strategy
+    passport.use(new TotpStrategy({codeField:"otp"},
+      function(user, done) {
+        console.log(user);
+        Otp.findOne({ _id: user.otp }, function (err, key) {
+          if (err) { return done(err); }
+          return done(null, key.key, 30);
+        });
+      }
+    ));
 
     // Use local strategy
     passport.use(new LocalStrategy({

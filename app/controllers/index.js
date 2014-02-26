@@ -6,7 +6,6 @@ var mongoose = require('mongoose'),
 
 exports.render = function (req, res) {
 
-  var userExist = true;
   User.count(function (err, count) {
     if (err || count == 0) {
       res.render('users/signup', {
@@ -14,9 +13,15 @@ exports.render = function (req, res) {
         user: new User()
       });
     } else {
-      res.render('index', {
-        user: req.user ? JSON.stringify(req.user) : 'null'
-      });
+      if (req.isAuthenticated()) {
+        res.render('index', {
+          user: req.user ? JSON.stringify(req.user) : 'null'
+        });
+      } else {
+        res.render('users/signin', {
+          title: 'Signin'
+        });
+      }
     }
   });
 };

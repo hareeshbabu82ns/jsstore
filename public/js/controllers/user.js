@@ -11,7 +11,21 @@ angular.module('mean.system')
         $http.post('/user/' + $scope.user._id + '/update',
                 $scope.user)
             .success(function (resp) {
-
+              angular.copy(resp.user, $scope.user);
+            });
+      };
+      $scope.genOTP = function () {
+        $http.get('/user/' + $scope.user._id + '/genotp')
+            .success(function (resp) {
+              angular.copy(resp.user, $scope.user);
+              angular.copy(resp.user, Global.user);
+            });
+      };
+      $scope.delOTP = function () {
+        $http.get('/user/' + $scope.user._id + '/delotp')
+            .success(function (resp) {
+              angular.copy(resp.user, $scope.user);
+              angular.copy(resp.user, Global.user);
             });
       };
     }]);

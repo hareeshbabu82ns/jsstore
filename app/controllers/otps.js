@@ -5,7 +5,7 @@
  */
 var mongoose = require('mongoose'),
     Otp = mongoose.model('Otp'),
-    //notp = require('notp'),
+//notp = require('notp'),
     totp = require('../lib/otp'),
     http = require('http'),
     _ = require('lodash');
@@ -31,7 +31,9 @@ exports.generateOTP = function (req, res) {
     res.jsonp({otp: totp.gen(otp.key, {}),
       time: new Date().getTime()});
   } else
-    res.jsonp({error: 'generate a Key, before using'});
+    res.jsonp({ msgs: [
+      {text: 'generate a Key, before using', type: 'error'}
+    ]});
 };
 
 /**
@@ -39,21 +41,29 @@ exports.generateOTP = function (req, res) {
  */
 exports.updateKey = function (req, res) {
   var otp = req.otp;
-  var body = req.body || {key:''};
+  var body = req.body || {key: ''};
 //  console.log('key provided with '+ JSON.stringify(key));
   otp = _.extend(otp, body);
+  var sMsg = '';
   if (body.key && body.key.length) {
     //user specific key
+    sMsg = 'Key Updated';
   } else {
     //generate OTP Key
     otp.key = totp.genKey();
+    sMsg = 'Key Generaed and Updated';
   }
   //console.log('key updated with '+ otp.key);
   otp.save(function (err) {
     if (err) {
-      res.jsonp({error: err});
+      res.jsonp({ msgs: [
+        {text: 'Key Not Updated', type: 'error'}
+      ]});
     } else {
-      res.jsonp({msg: "success"});
+      otp.key = '';
+      res.jsonp({ otp: otp, msgs: [
+        {text: sMsg, type: 'success'}
+      ]});
     }
   });
 };

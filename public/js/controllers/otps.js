@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.otps')
-    .controller('OtpsController', ['$scope', '$routeParams', '$location', 'Global', 'mongular', '$http', '$timeout', function ($scope, $routeParams, $location, Global, mongo, $http, $timeout) {
+    .controller('OtpsController', ['$scope', '$routeParams', '$location', 'Global', 'mongular', '$http', '$timeout','growl', function ($scope, $routeParams, $location, Global, mongo, $http, $timeout, growl) {
       $scope.global = Global;
       $scope.otps = [];
       $scope.otp = {};
@@ -47,7 +47,7 @@ angular.module('mean.otps')
         $timeout.cancel(mytimeout);
       });
     }])
-    .controller('OtpDetailController', ['$scope', '$routeParams', '$location', 'Global', 'mongular', '$http', '$timeout', function ($scope, $routeParams, $location, Global, mongular, $http, $timeout) {
+    .controller('OtpDetailController', ['$scope', '$routeParams', '$location', 'Global', 'mongular', '$http', '$timeout','growl', function ($scope, $routeParams, $location, Global, mongular, $http, $timeout,growl) {
       $scope.global = Global;
       $scope.otp = {};
       if ($routeParams.otpId && $routeParams.otpId != 0) {
@@ -86,19 +86,21 @@ angular.module('mean.otps')
       };
       $scope.save = function () {
         if (_.isUndefined($scope.otp._id)) {
-          $scope.otp.user = $scope.global.user;
           mongular.all('otps').post($scope.otp) // create
               .then(function (otp) {
+                growl.addSuccessMessage('created');
                 $location.path('otps/' + otp._id);
               });
         } else
           $scope.otp.put() //update
               .then(function () {
+                growl.addSuccessMessage('saved');
               });
       };
       $scope.delete = function () {
         if ($scope.otp) {
           $scope.otp.remove().then(function () {
+            growl.addSuccessMessage('deleted');
             $location.path('otps');
           });
         }

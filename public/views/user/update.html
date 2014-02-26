@@ -46,10 +46,21 @@
           <button class="btn btn-primary" type="button"
                   data-ng-click="save()">Save
           </button>
+          <button class="btn btn-info" type="button"
+                  data-ng-hide="user.otp"
+                  data-ng-click="genOTP()">Generate OTP
+          </button>
+          <button class="btn btn-danger" type="button"
+                  data-ng-show="user.otp"
+                  data-ng-click="delOTP()">Remove OTP
+          </button>
         </div>
       </div>
     </form>
   </div>
-  <div class="col-sm-6">
+  <div class="col-sm-6" data-ng-show="user.otp">
+
+    <img ng-src="/api/otp/{{user.otp}}/genqr"/>
+
   </div>
 </div>
