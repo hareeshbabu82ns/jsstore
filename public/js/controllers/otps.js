@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.otps')
-    .controller('OtpsController', ['$scope', '$routeParams', '$location', 'Global', 'mongular', '$http', '$timeout','growl', function ($scope, $routeParams, $location, Global, mongo, $http, $timeout, growl) {
+    .controller('OtpsController', ['$scope', '$routeParams', '$location', 'Global', 'mongular', '$http', '$timeout', 'growl', function ($scope, $routeParams, $location, Global, mongo, $http, $timeout, growl) {
       $scope.global = Global;
       $scope.otps = [];
       $scope.otp = {};
@@ -15,6 +15,15 @@ angular.module('mean.otps')
       $scope.select = function (lotp) {
         $scope.otp = lotp;
         $scope.genOTP();
+      };
+      $scope.search = function () {
+        var p = [
+          {title: "~" + $scope.searchStr},
+          {email: "~" + $scope.searchStr}
+        ];
+        $scope.otps.getList({$or: JSON.stringify(p)}).then(function (res) {
+          $scope.otps = res;
+        });
       };
       $scope.gOTP = '';
       $scope.genOTP = function () {
@@ -47,7 +56,7 @@ angular.module('mean.otps')
         $timeout.cancel(mytimeout);
       });
     }])
-    .controller('OtpDetailController', ['$scope', '$routeParams', '$location', 'Global', 'mongular', '$http', '$timeout','growl', function ($scope, $routeParams, $location, Global, mongular, $http, $timeout,growl) {
+    .controller('OtpDetailController', ['$scope', '$routeParams', '$location', 'Global', 'mongular', '$http', '$timeout', 'growl', function ($scope, $routeParams, $location, Global, mongular, $http, $timeout, growl) {
       $scope.global = Global;
       $scope.otp = {};
       if ($routeParams.otpId && $routeParams.otpId != 0) {
@@ -61,7 +70,7 @@ angular.module('mean.otps')
         if (_.isUndefined($scope.otp._id)) {
           //new - no action
         } else {
-          $http.get('/api/otp/' + $scope.otp._id + '/genotp')
+          return $http.get('/api/otp/' + $scope.otp._id + '/genotp')
               .success(function (res) {
                 if (res.err) {
                   //something went wrong
@@ -110,7 +119,7 @@ angular.module('mean.otps')
       $scope.countDown = 0;
       var timerTick = function () {
         var epoch = Math.round(new Date().getTime() / 1000.0);
-        $scope.countDown = 30 - (epoch % 30);
+        //$scope.countDown = 30 - (epoch % 30);
         if (epoch % 30 === 0) {
           $scope.genOTP();
         }

@@ -1,36 +1,32 @@
 {% extends 'auth.html' %}
 
 {% block auth %}
-    <form class="signin form-horizontal" action="/users" method="post">
-        <div class="form-group">
-            <label class="col-md-4 control-label" for="name">Full Name</label>
-            <div class="col-md-8">
-                <input id="name" class="form-control" type="text" name="name" placeholder="Full Name" value="{{user.name}}" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-md-4 control-label" for="email">Email</label>
-            <div class="col-md-8">
-                <input id="email" class="form-control" type="text" name="email" placeholder="Email" value="{{user.email}}" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-md-4 control-label" for="username">Username</label>
-            <div class="col-md-8">
-                <input id="username" class="form-control" type="text" name="username" placeholder="Username" value="{{user.username}}" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-md-4 control-label" for="password">Password</label>
-            <div class="col-md-8">
-                <input id="password" class="form-control" type="password" name="password" placeholder="Password" />
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-4 col-md-8">
-                <button class="btn btn-primary" type="submit">Sign up</button>&nbsp;
-                or&nbsp;<a class="show-login" href="/signin">login</a>
-            </div>
-        </div>
-    </form>
+<div class="form-box" id="login-box" style="border: 1px solid #000000">
+  <div class="header">Register New Membership</div>
+  <form action="/users" method="post">
+    <div class="body bg-gray">
+      <div class="form-group">
+        <input type="text" name="name" class="form-control" placeholder="Full name"/>
+      </div>
+      <div class="form-group">
+        <input type="text" name="email" class="form-control" placeholder="email"/>
+      </div>
+      <div class="form-group">
+        <input type="text" name="username" class="form-control" placeholder="User Name"/>
+      </div>
+      <div class="form-group">
+        <input type="password" name="password" class="form-control" placeholder="Password"/>
+      </div>
+      <div class="form-group">
+        <input type="password" name="password2" class="form-control" placeholder="Retype password"/>
+      </div>
+    </div>
+    <div class="footer">
+
+      <button type="submit" class="btn bg-olive btn-block">Sign me up</button>
+
+      <a href="/signin" class="text-center">I already have a membership</a>
+    </div>
+  </form>
+</div>
 {% endblock %}

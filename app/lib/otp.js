@@ -7,7 +7,7 @@ var otp = {};
 module.exports = otp;
 
 otp.verify = function (key, token, opt) {
-  return (this.gen(key, opt) == token);
+  return (this.gen(key, opt) === token);
 };
 
 otp.genKey = function (secret, length) {
@@ -22,18 +22,19 @@ otp.genKey = function (secret, length) {
 };
 
 otp.gen = function (secret, opt) {
-  var time = opt.time || 30;
+  var lopt = opt || {};
+  var time = lopt.time || 30;
   var _t = new Date().getTime();
-  var len = opt.length || 16;
+  var len = lopt.length || 16;
 
   // Time has been overwritten.
-  if (opt._t) {
+  if (lopt._t) {
     console.log('#####################################');
     console.log('# NOTE: TOTP TIME VARIABLE HAS BEEN #');
     console.log('# OVERWRITTEN.  THIS SHOULD ONLY BE #');
     console.log('# USED FOR TEST PURPOSES.           #');
     console.log('#####################################');
-    _t = opt._t;
+    _t = lopt._t;
   }
   var key = base32tohex(secret);
   var epoch = Math.round(_t / 1000.0);

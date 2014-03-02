@@ -1,25 +1,30 @@
-<section data-ng-controller="OtpsController" data-ng-init="find()">
-  <div class="col-sm-10">
-    <div class="col-sm-3 table-bordered" style="margin: 4px"
-         data-ng-repeat="otp in otps"
-         class="thumbnail" ng-class="{'alert-success':selected(otp)}"
-         data-ng-click="select(otp)">
-      <h4><a data-ng-href="#!/otps/{{otp._id}}">{{otp.title}}</a></h4>
-      {{otp.email}}
-    </div>
-  </div>
-  <div class="col-sm-2" data-ng-show="otp._id">
-    <div class="col-sm-6">
-      <h4><span>{{otp.title}}</span></h4>
-      <!--<span>{{otp.created | date:'medium'}}</span>-->
+<section data-ng-controller="OtpsController">
+  <div class="box box-success box-solid">
+    <div class="box-header">
+      <h3 class="box-title">OTP List</h3>
 
-      <h3><span class="label label-primary">{{gOTP}}</span></h3>
+      <div class="box-tools pull-right">
+          <span>
+          <span class="label label-primary"
+                style="font-size: 17px">{{gOTP}}</span>
+          <input type="text" data-min="0" data-max="30" data-readonly="true"
+                 class="dialOTP" ui-jq="knob"
+                 data-width="30" data-height="30">
+          </span>
+        <input type="text" placeholder="Search..."
+               data-ng-model="searchStr"
+               ui-keypress="{'enter':'search()'}">
+      </div>
     </div>
-    <div class="col-sm-6">
-      <input type="text" data-min="0" data-max="30" data-readonly="true"
-             class="dialOTP" ui-jq="knob"
-             data-width="50" data-height="50">
+    <div class="box-body row">
+      <div class="col-lg-2 col-sm-3 col-xs-3" data-ng-repeat="otp in otps">
+        <div class="box" style="padding-left: 3px"
+             ng-class="{'bg-aqua':selected(otp)}"
+             data-ng-click="select(otp)">
+          <h4><a data-ng-href="#!/otps/{{otp._id}}">{{otp.title}}</a></h4>
+          {{otp.email}}
+        </div>
+      </div>
     </div>
-    <img ng-src="/api/otp/{{otp._id}}/genqr"/>
   </div>
 </section>

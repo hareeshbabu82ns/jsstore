@@ -21,7 +21,7 @@ var OtpSchema = new Schema({
   },
   type: {
     type: String,
-    default: 'TOTP',
+    default: 'totp',
     trim: true
   },
   key: {
@@ -50,9 +50,10 @@ OtpSchema.path('type').validate(function (value) {
 
 //otpauth://totp/<email>?secret=<secret>[&issuer=<title>]
 OtpSchema.virtual('otpURL').get(function () {
-  return 'otpauth://' + this.type
-      + '/' + this.email + '?secret='
-      + this.key;
+  return 'otpauth://' + this.type.toLowerCase()
+      + '/' + this.email
+      + '?secret=' + this.key
+      + '&issuer='+ this.title;
 });
 
 /**

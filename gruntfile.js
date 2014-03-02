@@ -29,7 +29,23 @@ module.exports = function(grunt) {
                 options: {
                     livereload: true
                 }
+            },
+            less: {
+              files: ['public/less/**'],
+              options: {
+                livereload: true
+              }
             }
+        },
+        less: {
+          development: {
+            options: {
+              paths: ["public/css/**"]
+            },
+            files: {
+              "public/css/main.css": "public/less/AdminLTE.less"
+            }
+          }
         },
         jshint: {
             all: {
@@ -45,7 +61,7 @@ module.exports = function(grunt) {
                     file: 'server.js',
                     args: [],
                     ignoredFiles: ['public/**'],
-                    watchedExtensions: ['js'],
+                    watchedExtensions: ['js', 'less'],
                     nodeArgs: ['--debug'],
                     delayTime: 1,
                     env: {
@@ -88,12 +104,13 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-nodemon');
     grunt.loadNpmTasks('grunt-concurrent');
     grunt.loadNpmTasks('grunt-env');
+    grunt.loadNpmTasks('grunt-contrib-less');
 
-    //Making grunt default to force in order not to break the project.
+  //Making grunt default to force in order not to break the project.
     grunt.option('force', true);
 
     //Default task(s).
-    grunt.registerTask('default', ['jshint', 'concurrent']);
+    grunt.registerTask('default', ['jshint','less', 'concurrent']);
 
     //Test task.
     grunt.registerTask('test', ['env:test', 'mochaTest', 'karma:unit']);

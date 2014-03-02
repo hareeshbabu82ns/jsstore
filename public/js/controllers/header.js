@@ -12,6 +12,14 @@ angular.module('mean.system')
         {
           'title': 'Create OTP',
           'link': 'otps/create'
+        },
+        {
+          'title': 'Secrets',
+          'link': 'secrets'
+        },
+        {
+          'title': 'Create Secret',
+          'link': 'secrets/create'
         }
       ];
 
