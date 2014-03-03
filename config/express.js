@@ -101,7 +101,7 @@ module.exports = function(app, passport, db) {
         app.use(function(req, res) {
             res.status(404).render('404', {
                 url: req.originalUrl,
-                error: 'Not found'
+                error: req.originalUrl + 'Not found'
             });
         });
 

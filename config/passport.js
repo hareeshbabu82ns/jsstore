@@ -4,7 +4,6 @@ var mongoose = require('mongoose'),
     User = mongoose.model('User'),
     Otp = mongoose.model('Otp'),
     config = require('./config'),
-    notp = require('notp'),
     LocalOtpStrategy = require('../app/lib/passport-lotp'),
     totp = require('../app/lib/otp');
 
