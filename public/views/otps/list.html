@@ -1,28 +1,37 @@
 <section data-ng-controller="OtpsController">
-  <div class="box box-success box-solid">
-    <div class="box-header">
-      <h3 class="box-title">OTP List</h3>
-
-      <div class="box-tools pull-right">
-          <span>
-          <span class="label label-primary"
-                style="font-size: 17px">{{gOTP}}</span>
-          <input type="text" data-min="0" data-max="30" data-readonly="true"
-                 class="dialOTP" ui-jq="knob"
-                 data-width="30" data-height="30">
-          </span>
-        <input type="text" placeholder="Search..."
-               data-ng-model="searchStr"
-               ui-keypress="{'enter':'search()'}">
+  <div class="page-header row">
+    <div class="col-lg-6 h2"> OTP List</div>
+    <div class="col-lg-3">
+      <div class="pull-right" data-ng-show="otp._id">
+      <div class="label label-primary"
+           style="font-size: 15px">{{gOTP}}
+      </div>
+      <div type="text" data-min="0" data-max="30" data-readonly="true"
+           class="dialOTP" ui-jq="knob"
+           data-width="35" data-height="35"></div>
       </div>
     </div>
-    <div class="box-body row">
-      <div class="col-lg-2 col-md-3 col-sm-6 col-xs-12" data-ng-repeat="otp in otps">
-        <div class="box" style="padding-left: 3px"
-             ng-class="{'bg-aqua':selected(otp)}"
-             data-ng-click="select(otp)">
-          <h4><a data-ng-href="#!/otps/{{otp._id}}">{{otp.title}}</a></h4>
-          {{otp.email}}
+    <div class="col-lg-3">
+      <div class="input-group">
+        <input type="text" class="form-control" data-ng-model="searchStr"
+            placeholder="search.." ui-keypress="{'enter':'search()'}">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button" data-ng-click="search()">
+          <i class="glyphicon glyphicon-search"></i>
+        </button>
+      </span>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-2 col-md-3 col-sm-6 col-xs-12" data-ng-repeat="otp in otps">
+      <div class="small-box bg-yellow" style="padding-left: 3px"
+           ng-class="{'bg-aqua':selected(otp)}"
+           data-ng-click="select(otp)">
+        <div class="inner">
+          <a class="h3 text-maroon"
+             data-ng-href="#!/otps/{{otp._id}}">{{otp.title}}</a>
+          <p>{{otp.email}}</p>
         </div>
       </div>
     </div>

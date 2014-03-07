@@ -36,6 +36,10 @@ var SecretSchema = new Schema({
   modified: {
     type: Date,
     default: Date.now
+  },
+  parent: {
+    type: Schema.ObjectId,
+    ref: 'SecTree'
   }
 });
 
