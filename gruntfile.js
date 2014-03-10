@@ -110,7 +110,7 @@ module.exports = function(grunt) {
     grunt.option('force', true);
 
     //Default task(s).
-    grunt.registerTask('default', ['jshint','less', 'concurrent']);
+    grunt.registerTask('default', ['less', 'jshint', 'concurrent']);
 
     //Test task.
     grunt.registerTask('test', ['env:test', 'mochaTest', 'karma:unit']);
