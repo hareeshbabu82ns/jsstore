@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-    Otp = mongoose.model('Secret'),
+    secret = mongoose.model('Secret'),
     _ = require('lodash');
 
 /**

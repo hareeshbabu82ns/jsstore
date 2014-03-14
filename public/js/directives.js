@@ -9,46 +9,49 @@ angular.module('mean')
           apiBase: '@',
           apiRoot: '@',
           selectedNode: '=',
-          selectedNodeChanged: '='
+          selectedNodeChanged: '=',
+          onRename: '&'
         },
         link: function (scope, element, attrs) {
 
           var treeElement = $(element);
           var tree = treeElement.jstree({
-            'json_data': {
-              'ajax': {
+            'core': {
+              'multiple': false,
+              'check_callback': true,
+              'data': {
                 'url': function (node) {
-                  if (node === -1) { // root of tree
-                    var pid = '';  // no parent
+                  var pid = '0';
+                  if (node.id === '#') { // root of tree
+                    pid = '0';  // no parent
                   } else {
-                    var pid = $(node).attr('id'); // parent id
+                    pid = $(node).attr('id'); // parent id
                   }
-                  return scope.apiBase + '?parent=' + pid;
+                  if(pid == '0')
+                    return scope.apiBase;
+                  else
+                    return scope.apiBase + '?parent=' + pid;
                 },
                 'data': function (n) {
-                  return {
-                    'operation': 'get_children',
-                    'id': n.attr ? n.attr('id').replace('node_', '') : 1
-                  };
+                  return n.attr ? n.attr('id') : 0;
+                },
+                'success': function (res) {
+                  for (var i = 0; i < res.length; i++) {
+                    if (res[i].parent == 0)
+                      res[i].parent = '#';
+                    //res[i].children = true;
+                  }
                 }
               }
             },
             'themes': {
               'theme': 'classic'
             },
-            'plugins': ['themes', 'json_data', 'ui']
+            'plugins': ['themes', 'search', 'wholerow']
           });
-
-          tree.bind('select_node.jstree', function () {
-
+          treeElement.on('select_node.jstree', function (node, data) {
             $timeout(function () {
-
-              scope.selectedNode = {
-                id: treeElement.jstree('get_selected').attr('id'),
-                text: treeElement.find('.jstree-clicked').text(),
-                subid: treeElement.jstree('get_selected').attr('subid')
-              };
-
+              scope.selectedNode = data.node;
               if (scope.selectedNodeChanged) {
                 $timeout(function () {
 
@@ -56,8 +59,17 @@ angular.module('mean')
                 });
               }
             });
-
           });
+          treeElement.on('rename_node.jstree', function (e, data) {
+            $timeout(function () {
+              if (scope.onRename) {
+                var fn = scope.onRename();
+                fn(e, data);
+              }
+
+            });
+          })
+          ;
         }
       };
     });
