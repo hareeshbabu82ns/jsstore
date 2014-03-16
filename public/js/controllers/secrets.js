@@ -5,10 +5,10 @@ angular.module('mean.secrets')
       $scope.global = Global;
       $scope.secrets = [];
       $scope.secret = {};
-      mongo.all('secrets').getList({select: "title,email,modified"})
-          .then(function (secrets) {
-            $scope.secrets = secrets;
-          });
+//      mongo.all('secrets').getList({select: "title,email,modified,parent"})
+//          .then(function (secrets) {
+//            $scope.secrets = secrets;
+//          });
       $scope.selected = function (lsecret) {
         return (lsecret._id == $scope.secret._id);
       };
@@ -23,12 +23,24 @@ angular.module('mean.secrets')
           {url: "~" + $scope.searchStr},
           {note: "~" + $scope.searchStr}
         ];
-        $scope.secrets.getList({$or: JSON.stringify(p)}).then(function (res) {
+        $scope.securets.getList({$or: JSON.stringify(p)}).then(function (res) {
           $scope.secrets = res;
         });
       };
+        $scope.parent = {};
+        $scope.treeSel = function(treeItem){
+            $scope.parent = treeItem.original;
+            mongo.all('secrets').getList({select: "title,email,modified,parent",
+                parent: $scope.parent._id})
+                .then(function (secrets) {
+                    $scope.secrets = secrets;
+                });
+        };
+        $scope.treeReady = function(treeEle){
+            $(treeEle).jstree('select_node',$scope.selected.id);
+        };
     }])
-    .controller('SecretDetailController', ['$scope', '$routeParams', '$location', 'Global', 'mongular', '$http', '$timeout', 'growl', function ($scope, $routeParams, $location, Global, mongular, $http, $timeout, growl) {
+    .controller('SecretDetailController', ['$scope', '$routeParams', '$location', 'Global', 'mongular', '$http', '$timeout', 'growl', '$modal', function ($scope, $routeParams, $location, Global, mongular, $http, $timeout, growl, $modal) {
       $scope.global = Global;
       $scope.secret = {};
       if ($routeParams.secretId && $routeParams.secretId != 0) {
@@ -57,11 +69,50 @@ angular.module('mean.secrets')
           });
         }
       };
+        $scope.parentSel = function(){
+            //show parent tree model
+            var modal = $modal.open({
+                templateUrl: 'model_treesel.html',
+                controller: 'ParSelCtrl',
+                resolve:{
+                    item: function(){
+                           return $scope.secret.parent;
+                        }
+                    }
+                });
+            modal.result.then(function (selectedItem) {
+                if(selectedItem.original._id){
+                    if($scope.secret.parent)
+                        angular.copy(selectedItem.original,$scope.secret.parent);
+                    else
+                        $scope.secret.parent = angular.copy(selectedItem.original);
+                    console.log($scope.secret.parent);
+                }
+                console.log(selectedItem.original._id);
+            }, function () {
 
+            });
+        };
+    }])
+    .controller('ParSelCtrl',['$scope','$modalInstance','item',function($scope,$modalInstance,item){
+        $scope.selected = item;
+        $scope.treeSel = function(treeItem){
+            $scope.selected = treeItem;
+        };
+        $scope.parentSelOk = function () {
+            $modalInstance.close($scope.selected);
+        };
+        $scope.parentSelCancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
+        $scope.treeReady = function(treeEle){
+            $(treeEle).jstree('select_node',$scope.selected.id);
+        };
     }])
     .controller('SecTreeController', ['$scope', '$routeParams', 'mongular', '$http', 'growl', function ($scope, $routeParams, mongo, $http, growl) {
       $scope.currNode = {};
       $scope.qryText = '';
+      $scope.treeRef;
       $scope.create = function () {
         var par = 0;
         var sel = $scope.currNode;
@@ -74,12 +125,11 @@ angular.module('mean.secrets')
         txt = (txt && txt.length) ? txt : 'new node';
         mongo.all('sectree').post({text: txt, parent: par})
             .then(function (stitem) {
-              var ref = $('#sampleTree').jstree(true);
-              console.log(stitem);
+              //var ref = $('#sampleTree').jstree(true);
               if (stitem.parent == 0)
                 stitem.parent = '#';
-              sel = ref.create_node(sel, stitem);
-              ref.select_node(stitem);
+              sel = $scope.treeRef.create_node(sel, stitem);
+              $scope.treeRef.select_node(stitem);
             });
       };
       $scope.rename = function (e, data) {
@@ -90,7 +140,7 @@ angular.module('mean.secrets')
             if (sel.parent == '#')
               sel.parent = 0;
             mongo.one('sectree', sel._id).customPUT(sel).then(function () {
-              var ref = $('#sampleTree').jstree(true);
+              //var ref = $('#sampleTree').jstree(true);
             });
           }
         }
@@ -99,17 +149,23 @@ angular.module('mean.secrets')
         var sel = $scope.currNode.original;
         if (sel && sel.id && sel.id != '#') {
           mongo.one('sectree', sel._id).remove().then(function () {
-            var ref = $('#sampleTree').jstree(true);
-            ref.delete_node(sel);
+            //var ref = $('#sampleTree').jstree(true);
+            $scope.treeRef.delete_node(sel);
           });
         }
       };
       $scope.search = function () {
-        $('#sampleTree').jstree(true).search($scope.qryText);
+        //$('#sampleTree').jstree(true).search($scope.qryText);
+        $scope.treeRef.search($scope.qryText);
       };
       $scope.treeAction = function (action) {
         $('#sampleTree').jstree(action);
       };
+        $scope.treeReady = function(treeEle){
+            $scope.treeRef = $(treeEle).jstree(true);
+            $scope.treeRef.open_all();
+            $scope.$parent.treeReady(treeEle);
+        };
     }])
     .config(['$routeProvider',
       function ($routeProvider) {

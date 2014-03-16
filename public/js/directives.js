@@ -10,7 +10,8 @@ angular.module('mean')
           apiRoot: '@',
           selectedNode: '=',
           selectedNodeChanged: '=',
-          onRename: '&'
+          onRename: '&',
+          onReady: '='
         },
         link: function (scope, element, attrs) {
 
@@ -60,6 +61,13 @@ angular.module('mean')
               }
             });
           });
+            treeElement.on('ready.jstree', function () {
+                $timeout(function () {
+                    $timeout(function () {
+                        scope.onReady(treeElement);
+                    });
+                });
+            });
           treeElement.on('rename_node.jstree', function (e, data) {
             $timeout(function () {
               if (scope.onRename) {

@@ -58,6 +58,54 @@
             background-color: darken(@yellow, 5%);
         }
     }
+    &.btn-blue {
+      color: lighten(@blue,70%);
+      background-color: @blue;
+      border-color: darken(@blue, 5%);
+      &:hover, &:active, &.hover {
+        background-color: darken(@blue, 5%);
+      }
+    }
+    &.btn-navy {
+      color: lighten(@navy,70%);
+      background-color: @navy;
+      border-color: darken(@navy, 5%);
+      &:hover, &:active, &.hover {
+        background-color: darken(@navy, 5%);
+      }
+    }
+    &.btn-teal {
+      color: darken(@teal,70%);
+      background-color: @teal;
+      border-color: darken(@teal, 5%);
+      &:hover, &:active, &.hover {
+        background-color: darken(@teal, 5%);
+      }
+    }
+    &.btn-olive {
+      color: darken(@olive,70%);
+      background-color: @olive;
+      border-color: darken(@olive, 5%);
+      &:hover, &:active, &.hover {
+        background-color: darken(@olive, 5%);
+      }
+    }
+    &.btn-lime {
+      color: darken(@lime,70%);
+      background-color: @lime;
+      border-color: darken(@lime, 5%);
+      &:hover, &:active, &.hover {
+        background-color: darken(@lime, 5%);
+      }
+    }
+    &.btn-orange {
+      color: darken(@orange,70%);
+      background-color: @orange;
+      border-color: darken(@orange, 5%);
+      &:hover, &:active, &.hover {
+        background-color: darken(@orange, 5%);
+      }
+    }
     //Button size variations 
     &.btn-sm {
         font-size: 12px;
@@ -191,10 +239,11 @@
 //
 // Gradient Buttons
 // --------------------------------------------------
-.btn-gradient(@btn-color: #555) {
+.btn-gradient(@btn-color: #555, @txt-color: #fff) {
   #gradient > .vertical(@start-color: @btn-color; @end-color: darken(@btn-color, 12%));
   background-repeat: repeat-x;
   border-color: darken(@btn-color, 14%);
+  color: @txt-color;
 
   &:hover,
   &:focus {
