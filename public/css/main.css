@@ -2135,7 +2135,7 @@ Component: timeline
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe0e0e0', GradientType=0);
   background-repeat: repeat-x;
   border-color: #dbdbdb;
-  color: #ffffff;
+  color: #111111;
   text-shadow: 0 1px 0 #fff;
   border-color: #ccc;
 }

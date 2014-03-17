@@ -29,6 +29,10 @@
            ng-class="{'bg-aqua':selected(otp)}"
            data-ng-click="select(otp)">
         <div class="inner">
+          <span class="pull-right">
+            <i class="glyphicon glyphicon-star"
+               data-ng-show="otp.favorite"></i>
+          </span>
           <a class="h3 text-maroon"
              data-ng-href="#!/otps/{{otp._id}}">{{otp.title}}</a>
           <p>{{otp.email}}</p>

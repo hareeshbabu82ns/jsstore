@@ -32,6 +32,10 @@ var OtpSchema = new Schema({
   created: {
     type: Date,
     default: Date.now
+  },
+  favorite:{
+    type: Boolean,
+    default: false
   }
 });
 

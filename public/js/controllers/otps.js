@@ -5,7 +5,7 @@ angular.module('mean.otps')
       $scope.global = Global;
       $scope.otps = [];
       $scope.otp = {};
-      mongo.all('otps').getList({select: "title,email,created"})
+      mongo.all('otps').getList({select: "title,email,created,favorite"})
           .then(function (otps) {
             $scope.otps = otps;
           });
@@ -114,7 +114,15 @@ angular.module('mean.otps')
           });
         }
       };
-
+      $scope.toggleFavorite = function () {
+        if ($scope.otp._id) {//if not new
+          $scope.otp.favorite = !$scope.otp.favorite;
+          $scope.otp.put()
+              .then(function () {
+                growl.addSuccessMessage('updated');
+              });
+        }
+      };
       //timer
       $scope.countDown = 0;
       var timerTick = function () {

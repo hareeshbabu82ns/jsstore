@@ -1,3 +1,50 @@
-<section data-ng-controller="IndexController">
-	<h1><span class="text-green">jsStore</span> - to store OTPs and Secrets</h1>
+<section data-ng-controller="IndexController" class="row">
+  <div class="col-sm-6">
+    <div class="box">
+      <div class="box-header">
+        <div class="box-title">
+          <div class="h3">One Time Passwords</div>
+        </div>
+      </div>
+      <div class="box-body row">
+        <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12" data-ng-repeat="otp in otps">
+          <div class="small-box bg-red" style="padding-left: 3px"
+               ng-class="{'bg-aqua':selected(otp)}"
+               data-ng-click="select(otp)">
+            <div class="inner">
+              <a class="h3 text-maroon"
+                 data-ng-href="#!/otps/{{otp._id}}">{{otp.title}}</a>
+
+              <p>{{otp.email}}</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="box">
+      <div class="box-header">
+        <div class="box-title">
+          <div class="h3">Secrets</div>
+        </div>
+      </div>
+      <div class="box-body row">
+        <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12"
+             data-ng-repeat="secret in secrets"
+             data-ng-click="select(secret)">
+          <div class="small-box bg-green" style="padding-left: 3px"
+               ng-class="{'bg-aqua':selected(secret)}">
+            <div class="inner">
+              <a class="h3 text-maroon" data-ng-href="#!/secrets/{{secret._id}}">
+                {{secret.title}}</a>
+
+              <p>{{secret.email}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>

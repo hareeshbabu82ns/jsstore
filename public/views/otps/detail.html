@@ -2,7 +2,15 @@
   <div class="col-md-7">
     <div class="box">
       <div class="box-header">
-        <div class="box-title h3">OTP Details</div>
+        <div class="box-title">
+          <a href="" data-ng-click="toggleFavorite()">
+            <i class="glyphicon glyphicon-star-empty"
+               data-ng-hide="otp.favorite"></i>
+            <i class="glyphicon glyphicon-star"
+               data-ng-show="otp.favorite"></i>
+          </a>
+          <span class="h3"> OTP Details</span>
+        </div>
         <div class="pull-right h4">
             <span class="label label-primary">{{gOTP}}</span>
         </div>

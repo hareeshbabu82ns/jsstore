@@ -40,6 +40,10 @@ var SecretSchema = new Schema({
   parent: {
     type: Schema.ObjectId,
     ref: 'SecTree'
+  },
+  favorite:{
+    type: Boolean,
+    default: false
   }
 });
 
